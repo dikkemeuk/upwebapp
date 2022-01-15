@@ -1,0 +1,274 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model challengeCooldowns {
+  uid         Int
+  challenge   String @db.VarChar(50)
+  completedAt String @db.VarChar(100)
+  id          Int    @unique(map: "id")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model cod2_aliases {
+  uid      Int
+  alias    String @db.VarChar(60)
+  used     Int    @default(0)
+  uniqueID Int    @id @default(autoincrement())
+
+  @@index([uid], map: "uid")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model cod2_backupcodes {
+  uid  Int
+  code String  @db.VarChar(20)
+  used Boolean @default(false)
+
+  @@index([uid], map: "uid")
+  @@ignore
+}
+
+model cod2_bans {
+  id         Int      @id @unique(map: "id") @default(autoincrement()) @db.UnsignedInt
+  uid        Int
+  admin_uid  Int
+  reason     String   @default("no reason set") @db.VarChar(30)
+  date       DateTime @db.DateTime(0)
+  expiration DateTime @db.DateTime(0)
+
+  @@index([uid], map: "uid")
+}
+
+model cod2_challenges {
+  UID            Int @id
+  completedCount Int
+  coupons        Int @default(0)
+}
+
+model cod2_cmdlog {
+  uid       Int
+  command   String   @db.VarChar(256)
+  datetime  DateTime @db.DateTime(0)
+  messageID Int      @id @default(autoincrement())
+
+  @@index([uid], map: "uid")
+}
+
+model cod2_coupons {
+  id       Int     @id @default(autoincrement())
+  type     Int?
+  userdata Int?
+  code     String? @db.VarChar(32)
+}
+
+model cod2_donations {
+  id             Int       @id @default(autoincrement())
+  txn_id         String    @default("0") @db.VarChar(255)
+  amount_no_fees Decimal   @default(0.00) @db.Decimal(10, 2)
+  uid            Int?
+  amount         Decimal?  @db.Decimal(10, 2)
+  date           DateTime? @db.DateTime(0)
+  email          String?   @db.VarChar(50)
+  first_name     String?   @db.VarChar(50)
+  last_name      String?   @db.VarChar(50)
+  currency       String?   @db.VarChar(12)
+}
+
+model cod2_hatcodes {
+  code String  @id @db.VarChar(11)
+  used Boolean
+  hat  Int
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model cod2_ipbans {
+  uid       Int
+  admin_uid Int
+  reason    String  @db.VarChar(30)
+  ip        String  @db.VarChar(30)
+  time      BigInt
+  active    Boolean
+  banID     Int     @id @default(autoincrement())
+}
+
+model cod2_items {
+  id               Int                @id @default(autoincrement()) @db.UnsignedInt
+  name             String             @db.VarChar(30)
+  type             Int                @db.UnsignedInt
+  image_url        String             @db.VarChar(200)
+  xmodel           String             @db.VarChar(100)
+  price            Int
+  cod2_playeritems cod2_playeritems[]
+}
+
+model cod2_mapsPlayed {
+  mapname     String @id @unique(map: "mapname") @db.VarChar(50)
+  timesPlayed Int    @default(1)
+}
+
+model cod2_mapvotes {
+  uid     Int
+  mapname String @db.VarChar(30)
+  rating  Int
+
+  @@unique([uid, mapname], map: "data")
+  @@unique([uid, mapname], map: "uid")
+}
+
+model cod2_mutes {
+  id         Int      @id @unique(map: "id") @default(autoincrement()) @db.UnsignedInt
+  uid        Int
+  admin_uid  Int
+  reason     String   @default("no reason set") @db.VarChar(30)
+  date       DateTime @db.DateTime(0)
+  expiration DateTime @db.DateTime(0)
+
+  @@index([uid], map: "uid")
+}
+
+model cod2_ownedItems {
+  uid   Int     @id
+  items String? @db.VarChar(1000)
+}
+
+model cod2_player_settings {
+  player_id Int
+  name      String  @db.VarChar(32)
+  type      Int?
+  intvalue  Int
+  value     String? @db.VarChar(50)
+
+  @@id([player_id, name])
+  @@index([player_id], map: "player_id")
+}
+
+model cod2_playeritems {
+  id         Int        @id @unique(map: "id_2") @default(autoincrement()) @db.UnsignedInt
+  item_id    Int        @db.UnsignedInt
+  player_id  Int        @default(0) @db.UnsignedInt
+  cod2_items cod2_items @relation(fields: [item_id], references: [id], onUpdate: Restrict, map: "FK_cod2_playeritems_cod2_items")
+
+  @@index([item_id], map: "FK_cod2_playeritems_cod2_items")
+  @@index([id], map: "id")
+  @@index([player_id], map: "player_id")
+}
+
+model cod2_players {
+  id            Int      @unique(map: "id_2") @default(autoincrement())
+  forum_id      Int      @default(0)
+  guid          String   @db.VarChar(60)
+  wallet        Decimal  @default(0.00) @db.Decimal(10, 2)
+  rights        Int
+  ip            String   @db.VarChar(60)
+  username      String   @db.VarChar(50)
+  password      String   @db.VarChar(60)
+  experience    Int
+  last_ip       String   @db.VarChar(60)
+  kills         Int
+  assists       Int
+  deaths        Int
+  rank          Int
+  killstreak    Int
+  time          DateTime @default(now()) @db.Timestamp(0)
+  register_time DateTime @default(now()) @db.Timestamp(0)
+  time_played   Int
+  melee_kills   Int
+  headshots     Int
+  class1        Int      @default(68616192)
+  class2        Int      @default(68616192)
+  class3        Int      @default(68616192)
+  class4        Int      @default(68616192)
+  class5        Int      @default(68616192)
+  class6        Int      @default(68616192)
+  class7        Int      @default(68616192)
+  class8        Int      @default(68616192)
+  auth          String?  @db.VarChar(32)
+  class1_name   String   @db.VarChar(32)
+  class2_name   String   @db.VarChar(32)
+  class3_name   String   @db.VarChar(32)
+  class4_name   String   @db.VarChar(32)
+  class5_name   String   @db.VarChar(32)
+  class6_name   String   @db.Char(32)
+  class7_name   String   @db.Char(32)
+  class8_name   String   @db.Char(32)
+  prestige      Int
+  zom_kills     Int      @default(0)
+  email         String?  @db.VarChar(32)
+  points        Int      @default(0)
+  hat           Int      @default(0)
+  greeting      String   @db.VarChar(64)
+  times_joined  Int      @default(0) @db.UnsignedInt
+  last_visit    DateTime @db.DateTime(0)
+  gpu           String?  @db.VarChar(128)
+  cpu           String?  @db.VarChar(128)
+  ram           Int      @default(0)
+  note          String?  @db.Text
+  auth_sha1     String   @db.Char(40)
+  statsHidden   Boolean  @default(false)
+
+  @@id([id, auth_sha1])
+  @@index([auth], map: "auth")
+  @@index([id], map: "id")
+  @@index([username], map: "username")
+}
+
+model cod2_playerweaponstats {
+  id        Int    @id @default(autoincrement())
+  player_id Int
+  weapon    String @db.VarChar(32)
+  kills     Int
+}
+
+model cod2_rules {
+  id   Int    @id @default(autoincrement())
+  type Int    @default(0)
+  rule String @db.VarChar(255)
+}
+
+model cod2_serverinfo {
+  id     Int      @id @default(autoincrement())
+  type   String   @db.VarChar(32)
+  key    String   @db.VarChar(255)
+  value  String   @db.VarChar(1024)
+  forced Boolean? @default(false)
+
+  @@unique([id, type, forced], map: "id")
+}
+
+model cod2_vips {
+  uid             Int       @id
+  expires         DateTime? @default(now()) @db.Timestamp(0)
+  boost_activated Boolean   @default(false)
+  boost_remaining Int       @default(7200)
+  boughtAt        DateTime  @default(now()) @db.Timestamp(0)
+  updated         Boolean   @default(false)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model cod2_warns {
+  uid       Int
+  admin_uid Int
+  reason    String  @db.VarChar(30)
+  time      BigInt
+  active    Boolean
+  warnID    Int     @id @default(autoincrement())
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model cod2_attrib {
+  uid   Int
+  key   String @db.VarChar(32)
+  value String @default("") @db.VarChar(32)
+
+  @@index([key], map: "key")
+  @@index([uid], map: "uid")
+  @@index([uid, key], map: "uid_2")
+  @@ignore
+}

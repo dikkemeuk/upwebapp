@@ -1,0 +1,42 @@
+{
+  "name": "upsite2",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.4.2",
+    "@heroicons/react": "^1.0.5",
+    "@prisma/client": "^3.7.0",
+    "@sapphire/time-utilities": "^1.5.0",
+    "@tailwindcss/aspect-ratio": "^0.4.0",
+    "bcrypt": "^5.0.1",
+    "clsx": "^1.1.1",
+    "cookie": "^0.4.1",
+    "crypto-js": "^4.1.1",
+    "daisyui": "^1.21.0",
+    "jsonwebtoken": "^8.5.1",
+    "next": "12.0.7",
+    "prisma": "^3.7.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "tw-elements": "^1.0.0-alpha6"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/cookie": "^0.4.1",
+    "@types/crypto-js": "^4.1.0",
+    "@types/jsonwebtoken": "^8.5.7",
+    "@types/node": "17.0.8",
+    "@types/react": "17.0.38",
+    "autoprefixer": "^10.4.1",
+    "eslint": "8.6.0",
+    "eslint-config-next": "12.0.7",
+    "postcss": "^8.2.15",
+    "tailwindcss": "^3.0.11",
+    "typescript": "4.5.4"
+  }
+}
