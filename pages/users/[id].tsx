@@ -1,20 +1,35 @@
 import apiFetch from "@lib/utils/api";
 import Layout from "components/Layout";
+import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-export default function MePage() {
+interface PlayerPageProps {
+  id: string;
+}
 
+const PlayerPage: NextPage<PlayerPageProps> = ({id}) => {
   const router = useRouter();
-  const { id } = router.query;
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    console.log(id);
 
     const Fetch = async () => {
-      const response = await apiFetch<{message: string, data: any}>(`/api/users/${router.query.id}`);
+
+      if(!id) {
+        setLoading(false);
+        return router.push("/");
+      }
+
+      const parsedId = parseInt(id);
+
+      if(isNaN(parsedId)) {
+        setLoading(false);
+        return router.push("/");
+      }
+
+      const response = await apiFetch<{message: string, data: any}>(`/api/users/${id}`);
       if(response.data) {
         setUser(response.data);
       }
@@ -23,7 +38,7 @@ export default function MePage() {
 
     Fetch()
 
-  }, [router, id])
+  }, [id, router])
 
 
   return (
@@ -40,3 +55,10 @@ export default function MePage() {
     </Layout>
   );
 }
+
+PlayerPage.getInitialProps = async (ctx) => {
+  const id = ctx?.query.id as string;
+  return { id };
+}
+
+export default PlayerPage

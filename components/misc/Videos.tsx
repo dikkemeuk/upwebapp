@@ -1,7 +1,4 @@
-import apiFetch from '@lib/utils/api';
 import SectionTitle from 'components/Section';
-import Skeleton from 'components/Skeleton';
-import { useEffect, useState } from 'react';
 
 interface Video {
   id: string
@@ -44,7 +41,7 @@ export default function Videos() {
               Subscribe to our YouTube to stay updated with our latest videos!
             </SectionTitle>
           </div>
-          <div className="w-[75%] carousel self-center">
+          <div className="w-full md:w-[75%] carousel self-center">
             {videos.map((vid, i) => (
               <div
                 key={vid.id}
@@ -59,7 +56,7 @@ export default function Videos() {
                   frameBorder="0"
                   allowFullScreen
                   loading='lazy'
-                />
+                > </iframe>
                 </div>
                 
                 <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">

@@ -3,6 +3,7 @@ import Layout from "../components/Layout";
 import apiFetch from "@lib/utils/api";
 import SectionTitle from "components/Section";
 import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 
 interface RestData {
   totalPlayers: number;
@@ -15,34 +16,28 @@ interface RestData {
   totalTimePlayed: string;
 }
 
-interface Props {
-  stats: RestData;
-}
 
 const Vids = dynamic(() => import("components/misc/Videos"));
 
-const LoadingPage = () => {
-  return (
-    <div className="card shadow bg-gray-800 m-2">
-        <div className="card-body">
-          <div className="card-title">
-            <SectionTitle pretitle="Our videos" align="center">
-              Subscribe to our YouTube to stay updated with our latest videos!
-            </SectionTitle>
-          </div>
-          <h1>The videos are being loaded! Stay tuned!</h1>
-        </div>
-      </div>
-  )
-}
-
-const Home: NextPage<Props> = ({stats}) => {
+const Home: NextPage = () => {
 
   const ToText = (string: string) => {
     const result = string.replace(/([A-Z])/g, " $1");
     const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
     return finalResult;
   };
+
+  const [data, setData] = useState<RestData>({} as RestData);
+
+  useEffect(() => {
+    const Fetch = async () => {
+      const response = await apiFetch<RestData>("/api/stats");
+      if (response) {
+        setData(response);
+      }
+    };
+    Fetch();
+  }, []);
 
   return (
     <Layout>
@@ -129,7 +124,7 @@ const Home: NextPage<Props> = ({stats}) => {
             </SectionTitle>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {Object.entries(stats).map(([key, value]) => (
+            {Object.entries(data).map(([key, value]) => (
               <div className="shadow stats" key={`${key}-${value}`}>
                 <div className="stat w-auto">
                   <div className="stat-title">{ToText(key)}</div>
@@ -144,14 +139,5 @@ const Home: NextPage<Props> = ({stats}) => {
     </Layout>
   );
 };
-
-Home.getInitialProps = async (ctx) => {
-  
-  const response = await apiFetch<RestData>("/api/stats");
-
-  return {
-    stats: response
-  }
-}
 
 export default Home;
