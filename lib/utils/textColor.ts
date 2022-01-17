@@ -1,0 +1,23 @@
+export function stripColors(str: string) {
+   
+    return str.replace("^^11", "^1")
+    .replace("^^22", "")
+    .replace("^^33", "")
+    .replace("^^44", "")
+    .replace("^^55", "")
+    .replace("^^66", "")
+    .replace("^^77", "")
+    .replace("^^88", "")
+    .replace("^^99", "")
+    .replace("^^00", "")
+    .replace("^1", "")
+    .replace("^2", "")
+    .replace("^3", "")
+    .replace("^4", "")
+    .replace("^5", "")
+    .replace("^6", "")
+    .replace("^7", "")
+    .replace("^8", "")
+    .replace("^9", "")
+    .replace("^0", "")
+}

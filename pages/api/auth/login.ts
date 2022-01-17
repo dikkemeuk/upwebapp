@@ -16,7 +16,7 @@ export default async function handler(
   }
 
   const encryptPw = async (str: string) => {
-    console.log(str);
+ 
 
     const res = (await prisma.$queryRawUnsafe(
       `SELECT MD5(CONCAT(MD5('${str}'), 'THISISASTRING'));`
@@ -24,7 +24,7 @@ export default async function handler(
 
     const pw = JSON.stringify(res[0]).split(":")[1];
     const fixed = pw.replaceAll('"', "").replace("}", "");
-    console.log(fixed);
+
     return `${fixed}`;
   };
 
@@ -47,7 +47,7 @@ export default async function handler(
   }
 
   const pw = await encryptPw(password);
-  console.log(pw === user.password);
+
   if (pw === user.password) {
     const data = {
       id: user!.id,
@@ -60,7 +60,6 @@ export default async function handler(
     res.setHeader(
       "Set-Cookie",
       cookie.serialize("auth", jwt, {
-        httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
         maxAge: 21600,

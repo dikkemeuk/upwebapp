@@ -10,7 +10,7 @@ import { getUser, setUser } from "@lib/utils/user";
 const MenuItems = [
   {
     name: "Your Profile",
-    href: "/users/me",
+    href: "/users/",
     current: false,
   },
   {
@@ -35,6 +35,15 @@ export default function AccountMenu() {
     const current = MenuItems.find((item) => item.href === router.pathname);
     const user = getUser()
     if(user) {
+      setNavItems(MenuItems.map((item) => {
+        if(item.href === "/users/") {
+          return {
+            ...item,
+            href: `/users/${user.id}`
+          }
+        }
+        return item;
+      }))
       setLoggedIn(true);
     }
 

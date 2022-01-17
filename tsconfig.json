@@ -16,7 +16,7 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@lib/*": ["./lib/*.ts"]
+      "@lib/*": ["./lib/*.ts"],
     },
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
