@@ -35,15 +35,7 @@ export default function AccountMenu() {
     const current = MenuItems.find((item) => item.href === router.pathname);
     const user = getUser()
     if(user) {
-      setNavItems(MenuItems.map((item) => {
-        if(item.href === "/users/") {
-          return {
-            ...item,
-            href: `/users/${user.id}`
-          }
-        }
-        return item;
-      }))
+      MenuItems[0].href = `/users/${user.id}`
       setLoggedIn(true);
     }
 

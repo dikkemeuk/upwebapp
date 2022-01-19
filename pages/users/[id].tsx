@@ -4,17 +4,26 @@ import Layout from "components/Layout";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Tooltip from "components/misc/ToolTip";
+import { NonAdminData } from "@lib/types";
+import Classes from "components/user/Classes";
+import dynamic from "next/dynamic";
 
 interface PlayerPageProps {
   id: string;
 }
 
+const ClassSection = dynamic(() => import("components/user/Classes"))
+const GeneralStats = dynamic(() => import("components/user/GeneralStats"))
+const AliasPart = dynamic(() => import("components/user/Aliases"))
+
 const PlayerPage: NextPage<PlayerPageProps> = ({id}) => {
   const router = useRouter();
   const [loading, setLoading] = useState(true)
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<NonAdminData | null>(null);
   
   const userState = useUserState()
+  const isAdmin = userState? userState.rights >= 20 : false;
 
   useEffect(() => {
 
@@ -48,70 +57,36 @@ const PlayerPage: NextPage<PlayerPageProps> = ({id}) => {
 
   }, [id, router, userState])
 
-
-  if(loading) {
-    
-  }
-
   return (
     <Layout loading={loading}>
       <div className="flex flex-col items-center justify-center h-full">
-        <div className="w-full max-w-md">
-          <div className="card shadow bg-gray-800 m-2">
-            <div className="card-body">
-              <div className="card-title">ToDo { user ? user.id : "nein"}</div>
-              
-            </div>
-          </div>
+        <div className="w-full">
+          <AliasPart id={id} />
+          
+          <GeneralStats id={id} />
+
+        
+          
+          {
+            userState?.id === Number(id) && (
+            <>
+              <div className="divider"><Tooltip tip="View your classes, the ability to change them will come soon!">Classes</Tooltip></div>
+              <ClassSection id={parseInt(id)} />
+            </>
+            )
+          }
+
+          <h1>{user?.username}</h1>
         </div>
       </div>
     </Layout>
   );
 }
 
-interface PlayerDataProps {
-  id: number
-  rights: number
-  username: string
-  experience: number
-  kills: number
-  assists: number
-  deaths: number
-  rank: number
-  killstreak: number
-  time: Date
-  register_time: Date
-  time_played: number
-  melee_kills: number
-  headshots: number
-  class1: number
-  class2: number
-  class3: number
-  class4: number
-  class5: number
-  class6: number
-  class7: number
-  class8: number
-  auth: string | null
-  class1_name: string
-  class2_name: string
-  class3_name: string
-  class4_name: string
-  class5_name: string
-  class6_name: string
-  class7_name: string
-  class8_name: string
-  prestige: number
-  zom_kills: number
-  email: string | null
-  points: number
-  hat: number
-  times_joined: number
-  last_visit: Date
-}
 
-const PlayerData = (data: PlayerPageProps) => {
 
+interface Props {
+  data: NonAdminData
 }
 
 PlayerPage.getInitialProps = async (ctx) => {
