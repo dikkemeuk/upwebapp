@@ -16,8 +16,6 @@ export default async function handler(
   }
 
   const encryptPw = async (str: string) => {
- 
-
     const res = (await prisma.$queryRawUnsafe(
       `SELECT MD5(CONCAT(MD5('${str}'), 'THISISASTRING'));`
     )) as any;

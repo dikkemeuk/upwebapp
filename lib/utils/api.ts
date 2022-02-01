@@ -1,6 +1,7 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { verify } from "jsonwebtoken";
 import { sleep } from "./misc";
+import { getUser } from "./user";
 
 export default async function apiFetch<T>(
   path: string,
@@ -40,6 +41,21 @@ export const authenticated =
 
       return res.status(403).json({ message: "Unauthorized" });
     });
-  };
+  }
+  
+  export const authenticatedAdmin =
+  (fn: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse) => {
+    return verify(req.cookies.auth!, secret, async function (err, decoded) {
+      if (!err && decoded) {
+        const user = getUser()
+        if(!user || user.rights !== decoded.rights || decoded.rights < 20){
+          return res.status(403).json({ message: "Unauthorized" });
+        }
 
+        const data = await fn(req, res);
+        return data;
+      }
 
+      return res.status(403).json({ message: "Unauthorized" });
+    });
+  }

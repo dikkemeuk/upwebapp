@@ -1,3 +1,5 @@
+import { cod2_players } from "@prisma/client"
+
 export interface NonAdminData {
     id: number
     rights: number
@@ -59,4 +61,10 @@ export interface GenericStats {
     prestige: number
     zom_kills: number
     isRegistered: boolean
+}
+
+export interface AdminData {
+    ip?: string
+    username?: string
+    email: string | null
 }

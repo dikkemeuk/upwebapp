@@ -22,7 +22,7 @@ export default function Layout({
   return (
     <div className="m-0 p-0 bg-gray-500 min-w-full min-h-screen">
       <Head>
-        <title>{head?.title || "Uniting People"}</title>
+        <title>{ head?.title ? `UP - ${head?.title}` : "Uniting People"}</title>
         <meta
           name="description"
           content={

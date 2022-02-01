@@ -47,7 +47,7 @@ export default function MembersPage() {
                     router.push(`/users/${member.uid?.toString()}`)
                   }
                 >
-                  <td>{stripColors(member.name)}</td>
+                  <td><p>{stripColors(member.name)}</p></td>
                   <td>{member.uid}</td>
                   <td>{member.rights}</td>
                 </tr>
