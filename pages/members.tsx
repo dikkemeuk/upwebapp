@@ -1,34 +1,32 @@
 import apiFetch from "@lib/utils/api";
-import { stripColors } from "@lib/utils/textColor";
-import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 
-export default function MembersPage() {
-  const [mems, setMems] = useState<
-    { uid: Number; name: string; rights: number }[]
-  >([] as { uid: Number; name: string; rights: number }[]);
-
-  const [loading, setLoading] = useState(true);
+export default function MembersPage({mems}: {mems: {uid: Number, name: string, rights: number}[]}) {
+  const [members, setMems] = useState<{ uid: Number; name: string; rights: number }[]>(mems);
   const router = useRouter();
-
+  
   useEffect(() => {
-    const Fetch = async () => {
-      const response = await apiFetch<
-        { uid: Number; name: string; rights: number }[]
-      >("/api/members");
-      if (response) {
-        setMems(response);
+
+    console.log(members)
+
+  const buildText = () => {
+    for(let i = 0; i < members.length; i++) {
+      const box = document.getElementById(`member-${members[i].uid}`)
+      if (box) {
+        box.innerHTML = `${mems[i].name}`
       }
-      setLoading(false);
-    };
-    Fetch();
-  }, []);
+    }
+  }
+
+  buildText()
+  }, [members, mems])
+  
 
   return (
-    <Layout loading={loading}>
-      <div className="overflow-x-auto">
+    <Layout head={{title: "Members"}}>
+      <div className="h-[80%]">
         <table className="table w-full">
           <thead>
             <tr>
@@ -47,7 +45,7 @@ export default function MembersPage() {
                     router.push(`/users/${member.uid?.toString()}`)
                   }
                 >
-                  <td><p>{stripColors(member.name)}</p></td>
+                  <td><p id={`member-${member.uid}`}></p></td>
                   <td>{member.uid}</td>
                   <td>{member.rights}</td>
                 </tr>
@@ -59,3 +57,12 @@ export default function MembersPage() {
     </Layout>
   );
 };
+
+MembersPage.getInitialProps = async () => {
+  const response = await apiFetch<
+    { uid: Number; name: string; rights: number }[]
+  >("/api/members");
+  return {
+    mems: response,
+  };
+}

@@ -14,11 +14,6 @@ const MenuItems = [
     current: false,
   },
   {
-    name: "Your Stats",
-    href: "/users/me/stats",
-    current: false,
-  },
-  {
     name: "Log out",
     href: "/logout",
     current: false,

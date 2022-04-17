@@ -2,7 +2,7 @@ import { authenticated } from "@lib/utils/api";
 import { prisma } from "@lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 import { cod2_cmdlog } from "@prisma/client";
-import { stripColors } from "@lib/utils/textColor";
+import { coloredText, stripColors } from "@lib/utils/textColor";
 
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -27,6 +27,8 @@ async function get(req: NextApiRequest, res: NextApiResponse) {
   if (parsedId) {
     const messages = await prisma.cod2_cmdlog.findMany({
       where: { uid: parsedId },
+      orderBy: { datetime: "desc" },
+      take: 1000
     });
 
     const user = await prisma.cod2_aliases.findMany({where: {uid: parsedId}});
@@ -42,7 +44,7 @@ async function get(req: NextApiRequest, res: NextApiResponse) {
 
     if (messages) {
       return res.status(200).json({
-        data: messages.map((x) => Object.assign(x, {name: stripColors(mostUsed)})).sort((a, b) => new Date(b.datetime).getTime() - new Date(a.datetime).getTime()),
+        data: messages.map((x) => Object.assign(x, {name: coloredText(mostUsed)})).sort((a, b) => new Date(b.datetime).getTime() - new Date(a.datetime).getTime()),
         message: "User found",
       });
     } else {

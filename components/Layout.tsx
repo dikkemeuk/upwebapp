@@ -20,7 +20,7 @@ export default function Layout({
   head,
 }: LayoutProps) {
   return (
-    <div className="m-0 p-0 bg-gray-500 min-w-full min-h-screen">
+    <div className="m-0 p-0 bg-gray-500 min-w-full max-h-screen min-h-screen">
       <Head>
         <title>{ head?.title ? `UP - ${head?.title}` : "Uniting People"}</title>
         <meta
@@ -35,7 +35,7 @@ export default function Layout({
 
       <NavBar />
       <div className="mx-2 my-1">{loading ? <Loading /> : children}</div>
-      <div className="w-full bottom-0">
+      <div className="w-full mb-0 bottom-0">
         <Footer />
       </div>
     </div>

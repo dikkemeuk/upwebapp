@@ -1,7 +1,6 @@
-import { authenticated } from "@lib/utils/api";
-import { prisma } from "@lib/prisma";
+import { messagecache } from "@lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
-import { coloredText } from "@lib/utils/textColor";
+import { ChatMessage } from "@lib/utils/MessageCache";
 
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -12,44 +11,28 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default authenticated(handler);
-
+export default handler
 async function get(req: NextApiRequest, res: NextApiResponse) {
 
-    const { limit } = req.query as { limit: string };
+  const messages = messagecache.firstChunk
+  console.log(`Loaded ${messages.length} messages`)
+
+  const ToReturn: ChatMessage[] = [];
   
-    const messages = await prisma.$queryRaw`SELECT * FROM cod2_cmdlog ORDER BY datetime DESC LIMIT ${limit ? limit : "5000"}` as ChatMessage[]
-    const ToReturn: string[] = [];
-    
-    for (const message of messages) {
+  for await (const message of messages) {
+    ToReturn.push(message)
+  }
 
-        const user = await prisma.cod2_aliases.findFirst({where: {uid: message.uid}, orderBy: { used: "desc" }, take: 1});
-        const name = coloredText(user?.alias || "Could not find user");
+  console.log(ToReturn)
 
-        const messageText = `<div key={${message.messageID}} class="rounded-lg px-1 py-2 border-b border-white">${coloredText(name)} ${coloredText(`^3[@${message.uid}]`)} ${coloredText(`^1${new Date(message.datetime).toLocaleString()}`)} : ${coloredText(message.content)} </div>`;
-        ToReturn.push(messageText);
-    }
-    
-
-    if (messages) {
-      return res.status(200).json({
-        data: ToReturn,
-        highestID: messages[0].messageID,
-        lowestID: messages[messages.length - 1].messageID,
-        message: "Messages",
-      });
-    } else {
-      return res.status(404).json({
-        message: "User not found",
-      });
-    }
-
-}
-
-interface ChatMessage {
-    uid: number
-    content: string
-    datetime: string
-    alias?: string
-    messageID: number
+  if (ToReturn) {
+    return res.status(200).json({
+      data: ToReturn,
+      message: "Messages",
+    });
+  } else {
+    return res.status(404).json({
+      message: "Not found",
+    });
+  }
 }

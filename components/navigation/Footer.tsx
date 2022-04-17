@@ -2,7 +2,7 @@
 
 export default function Footer() {
     return (
-        <footer className="p-10 footer bg-base-200 text-base-content footer-center bottom-0">
+        <footer className="p-10 footer bg-base-200 text-base-content footer-center bottom-0 mb-0">
         <div>
           <div className="grid grid-flow-col gap-4">
             <a href="https://discord.gg/ZFTDcm4" rel="noreferrer" target="_blank">

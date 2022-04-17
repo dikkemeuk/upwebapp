@@ -1,14 +1,10 @@
-import Collection from "@discordjs/collection"
-import { prisma } from "lib/prisma"
-import { coloredText } from "./utils/textColor";
+import { Collection } from "@discordjs/collection";
+import { PrismaClient } from "@prisma/client";
+import { aliascache } from "@lib/prisma";
+
+const prisma = new PrismaClient()
 
 export default class MessageCollection extends Collection<number, ChatMessage> {
-
-    private async resolveUser(message: ChatMessage) {
-        const user = await prisma.cod2_aliases.findFirst({where: {uid: message.uid}, orderBy: { used: "desc" }, take: 1});
-        const name = coloredText(user?.alias || "Could not find user");
-        return name
-    }
 
     public firstChunk: ChatMessage[] = []
 
@@ -34,7 +30,7 @@ export default class MessageCollection extends Collection<number, ChatMessage> {
         for (let i = 0; i < messages.length; i++) {
             
             const message = messages[i]
-            const alias = await this.resolveUser(message)
+            const alias =  aliascache.get(message.uid)?.sort((a, b) => b.used - a.used)[0]?.alias
             message.datetime = new Date(message.datetime).toLocaleString('nl-NL', { timeZone: "UTC" })
             message.alias = alias
             this.set(message.messageID, message)
@@ -55,7 +51,7 @@ export default class MessageCollection extends Collection<number, ChatMessage> {
         for (let i = messages.length - 1; i > 0; i--) {
             
             const message = messages[i]
-            const alias = await this.resolveUser(message)
+            const alias = aliascache.get(message.uid)?.sort((a, b) => b.used - a.used)[0]?.alias
             message.datetime = new Date(message.datetime).toLocaleString('nl-NL', { timeZone: "UTC" })
             message.alias = alias
             this.set(message.messageID, message)
@@ -85,7 +81,7 @@ export default class MessageCollection extends Collection<number, ChatMessage> {
 export interface ChatMessage {
     uid: number
     messageID: number
-    content: string
+    command: string
     datetime: string
     alias?: string
 }

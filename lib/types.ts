@@ -1,5 +1,3 @@
-import { cod2_players } from "@prisma/client"
-
 export interface NonAdminData {
     id: number
     rights: number

@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@lib/prisma";
-import { DurationFormatter } from "@sapphire/time-utilities";
-import { stripColors } from "@lib/utils/textColor";
+import { coloredText } from "@lib/utils/textColor";
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,12 +11,12 @@ export default async function handler(
   }
 
   const mems =
-    (await prisma.$queryRaw`SELECT rights, id FROM cod2_players WHERE rights > 1 ORDER BY rights DESC`) as MemberResult[];
+    (await prisma.$queryRaw`SELECT rights, id FROM cod2_players WHERE rights > 2 ORDER BY rights DESC`) as MemberResult[];
 
   const resolveUser = async (uid: number) => {
     const res =
-      (await prisma.$queryRaw`SELECT * FROM cod2_aliases WHERE uid = ${uid} ORDER BY used DESC`) as AliasQueryResult[];
-    return res[0]?.alias ? stripColors(res[0].alias) : "Unknown User";
+      (await prisma.$queryRaw`SELECT * FROM cod2_aliases WHERE uid = ${uid} ORDER BY used DESC LIMIT 1`) as AliasQueryResult[];
+    return res[0]?.alias ? coloredText(res[0].alias) : "Unknown User";
   };
 
   const array: Member[] = [];
@@ -28,6 +27,7 @@ export default async function handler(
       rights: member.rights,
       name: await resolveUser(member.id),
     };
+
     array.push(mem);
   }
 

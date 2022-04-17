@@ -25,7 +25,7 @@ async function get(req: NextApiRequest, res: NextApiResponse) {
         const parsedId = parseInt(id as string);
 
         if (parsedId) {
-            const user = await prisma.cod2_players.findUnique({where: {id: parsedId}});
+            const user = await prisma.cod2_players.findFirst({where: {id: parsedId}});
 
             if(user) {
                 return res.status(200).json({

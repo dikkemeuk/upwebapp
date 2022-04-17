@@ -11,11 +11,12 @@ export default async function apiFetch<T>(
     await sleep(1000);
   }
 
-  const response = await fetch(`${path}`, {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
     credentials: "include",
     headers: {
       ...options.headers,
+      
       "Content-Type": "application/json",
     },
   });
@@ -28,6 +29,9 @@ export default async function apiFetch<T>(
     return jsonResponse as T;
   }
 }
+
+const DEV = process.env.NODE_ENV === "development";
+const API_BASE_URL = DEV ? "http://localhost:3000" : "https://api.nextjs-starter.com";
 
 export const secret = "kWLFeLZadeckW0TnJRwj";
 

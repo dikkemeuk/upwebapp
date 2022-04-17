@@ -27,6 +27,17 @@ export default function ChatLog({ id }: { id: string }) {
         }>(`/api/messages/${id}`);
         if (response.data) {
           setMessages(response.data);
+          const buildText = () => {
+            for(let i = 0; i < messages.length; i++) {
+              const box = document.getElementById(`name-${messages[i].messageID}`)
+              if (box) {
+                box.innerHTML = `${messages[i].name} `
+              }
+            }
+          }
+        
+          buildText()
+
         } else {
           setMessages([{uid: 0, command: "Looks like i failed to load messages somehow, please try again!", datetime: new Date(), name: "System", messageID: 0}]);
         }
@@ -37,7 +48,7 @@ export default function ChatLog({ id }: { id: string }) {
       setLoading(false);
     };
     fetch();
-  }, [id]);
+  }, [id, messages]);
 
   if (loading) {
     return (
@@ -70,8 +81,7 @@ export default function ChatLog({ id }: { id: string }) {
         </h1>
         {messages.map((x) => (
           <p className="m-1" key={x.messageID}>
-            <span className="font-bold">
-              {x.name ?? "Unknown User"} -{" "}
+            <span id={`name-${x.messageID}`} className="font-bold">
             </span>
             <span className="text-yellow-500">[@{x.uid}]</span> -
             <span className="text-red-500 opacity-70">

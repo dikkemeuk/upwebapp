@@ -18,8 +18,9 @@ export default async function handler(
   const totalDeaths = stats.reduce((acc, cur) => acc + cur.deaths, 0);
   const totalKills = stats.reduce((acc, cur) => acc + cur.kills, 0);
   const totalAssists = stats.reduce((acc, cur) => acc + cur.assists, 0);
-  const totalExperience = stats.reduce((acc, cur) => acc + Number(cur.experience) , 0);
-
+  const totalPrestige = stats.reduce((acc, cur) => acc + Number(cur.prestige), 0);
+  const totalExperience = stats.reduce((acc, cur) => acc + Number(cur.experience) , 0) + totalPrestige * 175000;
+  
   const formatter = new DurationFormatter()
 
   const totalTimePlayed = formatter.format(stats.reduce((acc, cur) => acc + Number(cur.time_played), 0) * 1000, 5);
