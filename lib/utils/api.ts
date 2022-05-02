@@ -31,7 +31,7 @@ export default async function apiFetch<T>(
 }
 
 const DEV = process.env.NODE_ENV === "development";
-const API_BASE_URL = DEV ? "http://localhost:3000" : "https://api.nextjs-starter.com";
+const API_BASE_URL = DEV ? "localhost:3000" : "https://upwebapp.vercel.app";
 
 export const secret = "kWLFeLZadeckW0TnJRwj";
 
