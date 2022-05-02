@@ -17,4 +17,7 @@ module.exports = {
     require('@tailwindcss/aspect-ratio'),
     require('flowbite/plugin')
   ],
+  daisyui: {
+    themes: ["dark"],
+  },
 }

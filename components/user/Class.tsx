@@ -15,7 +15,7 @@ export default function Class({ data, className }: ClassProps) {
           <h1 className="font-bold text-white">{className}</h1>
         </div>
         
-          <ul>
+          <ul className="text-white">
             <li>
               <span className="font-bold">Primary:</span>{" "}
               {classData.primaryWeapon}

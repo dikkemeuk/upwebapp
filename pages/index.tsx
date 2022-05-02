@@ -73,7 +73,7 @@ const Home: NextPage = () => {
               pretitle="About us"
               title="Here's a little bit about us"
               align="center"
-            >
+            ><p className="text-white">
               Uniting People is a vibrant Zombies Server for Call of Duty 2 and
               was founded back in 2009 by leal. Four years later *|UP|* had then
               come to an end. <br /> After two years, in september 2015, it was
@@ -87,6 +87,8 @@ const Home: NextPage = () => {
               people. <br />
               Our elite members (admins) and infantry members will do anything
               to help your gaming experience, all you need to do is ask.
+            </p>
+              
             </SectionTitle>
           </div>
           <div className="text-center">
@@ -151,9 +153,9 @@ const Home: NextPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {Object.entries(data).map(([key, value]) => (
               <div className="shadow stats" key={`${key}-${value}`}>
-                <div className="stat w-auto">
-                  <div className="stat-title">{ToText(key)}</div>
-                  <div className="stat-value text-lg md:text-lg">{value}</div>
+                <div className="stat w-auto bg-slate-700">
+                  <div className="stat-title text-white">{ToText(key)}</div>
+                  <div className="stat-value text-lg md:text-lg text-white">{value}</div>
                 </div>
               </div>
             ))}
@@ -164,7 +166,7 @@ const Home: NextPage = () => {
         <div className="card-body">
           <div className="card-title">
             <SectionTitle pretitle="Our videos" align="center">
-              Subscribe to our YouTube to stay updated with our latest videos!
+              <span className="text-white">Subscribe to our YouTube to stay updated with our latest videos!</span>
             </SectionTitle>
           </div>
           <div className="w-full md:w-[75%] carousel self-center">
@@ -186,8 +188,8 @@ const Home: NextPage = () => {
                 </div>
                 
                 <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                  <a href={`#video${calculateMove(i + 1, "previous")}`} className="btn btn-circle">❮</a> 
-                  <a href={`#video${calculateMove(i + 1, "next")}`} className="btn btn-circle">❯</a>
+                  <a href={`#video${calculateMove(i + 1, "previous")}`} className="btn bg-red-800 btn-circle">❮</a> 
+                  <a href={`#video${calculateMove(i + 1, "next")}`} className="btn bg-red-800 btn-circle">❯</a>
                 </div>
               </div>
             ))}
