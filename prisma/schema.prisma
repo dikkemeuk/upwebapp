@@ -144,7 +144,11 @@ model cod2_player_settings {
   type      Int?
   intvalue  Int
   value     String? @db.VarChar(50)
-  uniqueID  Int     @unique(map: "uniqueID") @default(autoincrement())
+  uniqueID  Int     @default(autoincrement())
+
+  @@unique([player_id, name], map: "player_id_2")
+  @@index([player_id], map: "player_id")
+  @@index([uniqueID], map: "uniqueID")
 }
 
 model cod2_playeritems {
@@ -160,24 +164,24 @@ model cod2_playeritems {
 model cod2_players {
   id            Int      @id @default(autoincrement())
   forum_id      Int      @default(0)
-  guid          String   @db.VarChar(60)
+  guid          String?  @default("") @db.VarChar(60)
   wallet        Decimal  @default(0.00) @db.Decimal(10, 2)
-  rights        Int
+  rights        Int      @default(1)
   ip            String   @db.VarChar(60)
   username      String   @db.VarChar(50)
   password      String   @db.VarChar(60)
-  experience    Int
+  experience    Int?  @default(0)
   last_ip       String   @db.VarChar(60)
-  kills         Int
-  assists       Int
-  deaths        Int
-  rank          Int
-  killstreak    Int
+  kills         Int      @default(0)
+  assists       Int      @default(0)
+  deaths        Int      @default(0)
+  rank          Int      @default(0)
+  killstreak    Int?     @default(0)
   time          DateTime @default(now()) @db.Timestamp(0)
   register_time DateTime @default(now()) @db.Timestamp(0)
-  time_played   Int
-  melee_kills   Int
-  headshots     Int
+  time_played   Int   @default(0)
+  melee_kills   Int      @default(0)
+  headshots     Int      @default(0)
   class1        Int      @default(68616192)
   class2        Int      @default(68616192)
   class3        Int      @default(68616192)
@@ -187,28 +191,32 @@ model cod2_players {
   class7        Int      @default(68616192)
   class8        Int      @default(68616192)
   auth          String?  @db.VarChar(32)
-  class1_name   String   @db.VarChar(32)
-  class2_name   String   @db.VarChar(32)
-  class3_name   String   @db.VarChar(32)
-  class4_name   String   @db.VarChar(32)
-  class5_name   String   @db.VarChar(32)
-  class6_name   String   @db.Char(32)
-  class7_name   String   @db.Char(32)
-  class8_name   String   @db.Char(32)
-  prestige      Int
+  class1_name   String   @default("Custom Class 1") @db.VarChar(32)
+  class2_name   String   @default("Custom Class 2") @db.VarChar(32)
+  class3_name   String   @default("Custom Class 3") @db.VarChar(32)
+  class4_name   String   @default("Custom Class 4") @db.VarChar(32)
+  class5_name   String   @default("Custom Class 5") @db.VarChar(32)
+  class6_name   String   @default("Custom Class 6") @db.Char(32)
+  class7_name   String   @default("Custom Class 7") @db.Char(32)
+  class8_name   String   @default("Custom Class 8") @db.Char(32)
+  prestige      Int      @default(0)
   zom_kills     Int      @default(0)
   email         String?  @db.VarChar(32)
   points        Int      @default(0)
   hat           Int      @default(0)
   greeting      String   @db.VarChar(64)
   times_joined  Int      @default(0) @db.UnsignedInt
-  last_visit    DateTime @db.DateTime(0)
+  last_visit    DateTime @default(now()) @db.DateTime(0)
   gpu           String?  @db.VarChar(128)
   cpu           String?  @db.VarChar(128)
   ram           Int      @default(0)
   note          String?  @db.Text
   auth_sha1     String   @db.Char(40)
   statsHidden   Boolean  @default(false)
+
+  @@index([auth], map: "auth")
+  @@index([id], map: "id")
+  @@index([username], map: "username")
 }
 
 model cod2_playerweaponstats {

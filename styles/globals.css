@@ -8,3 +8,14 @@
     padding: 0;
   }
 }
+
+@layer components {
+  .tip{
+  visibility: hidden;
+  position: absolute;
+}
+.has-tooltip:hover .tip {
+  visibility: visible;
+  z-index: 100;
+}
+}

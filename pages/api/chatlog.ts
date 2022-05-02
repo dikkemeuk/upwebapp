@@ -1,7 +1,6 @@
 import { authenticated } from "@lib/utils/api";
 import { aliascache, messagecache } from "@lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
-import { coloredText } from "@lib/utils/textColor";
 import { ChatMessage } from "@lib/utils/MessageCache";
 
 

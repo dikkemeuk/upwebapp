@@ -9,8 +9,6 @@ export default function MembersPage({mems}: {mems: {uid: Number, name: string, r
   
   useEffect(() => {
 
-    console.log(members)
-
   const buildText = () => {
     for(let i = 0; i < members.length; i++) {
       const box = document.getElementById(`member-${members[i].uid}`)

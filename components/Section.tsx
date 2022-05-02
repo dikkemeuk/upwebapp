@@ -25,9 +25,9 @@ export default function SectionTitle(props: Props) {
       )}
 
       {props.children && (
-        <p className="py-4 text-lg leading-normal text-gray-500 lg:text-xl xl:text-xl dark:text-gray-300">
-          {props.children}
-        </p>
+        
+        props.children
+
       )}
       </ div>
   );

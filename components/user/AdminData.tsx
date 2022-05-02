@@ -1,4 +1,4 @@
-import { AdminData } from "@lib/types";
+import type{ AdminData } from "@lib/types";
 import apiFetch from "@lib/utils/api";
 
 import { useUserState } from "context/AuthContext";
@@ -24,7 +24,7 @@ export default function AdminPage({id}: AdminPageProps) {
 
     useEffect(() => {
 
-        if(user && user.rights > 20 || user?.id == parseInt(id)) {
+        if(user && user.rights >= 60|| user?.id == parseInt(id)) {
             const fetch = async () => {
                 const response = await apiFetch<{message: string, data: AdminData}>(`/api/admin/${id}`);
                 if (response.data) {
@@ -34,7 +34,8 @@ export default function AdminPage({id}: AdminPageProps) {
             };
             fetch();
         } else {
-            setData({ip: "Nice try, but you don't have the rights to view this information!", username: "", email: ""});
+            setData({ip: "Nice try!", username: "You cannot see this", email: " Better luck next time"});
+            setLoading(false)
         }
 
         
@@ -68,16 +69,28 @@ export default function AdminPage({id}: AdminPageProps) {
             <div className="divider">Sensitive details</div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {Object.entries(data!).map(([key, value]) => (
+
+            {
+                Object.entries(data ?? {}).length !== 0 ? (
+                    Object.entries(data!).map(([key, value]) => (
             
-                <div key={key} className="px-1 py-2 rounded-lg bg-gray-800">
-                <div className="stat-title">{ToText(key)}</div>
-                <div className="stat-value text-lg md:text-lg">
-                    {typeof value === "boolean" ? (value ? "Yes" : "No") : value.length ? value : "None"}
-                </div>
-                </div>
-            
-            ))}
+                        <div key={key} className="px-1 py-2 rounded-lg bg-gray-800">
+                        <div className="stat-title">{ToText(key)}</div>
+                        <div className="stat-value text-lg md:text-lg">
+                            {typeof value === "boolean" ? (value ? "Yes" : "No") : value && value.length ? value : "None"}
+                        </div>
+                        </div>
+                    
+                    ))
+                ) : (
+                    <div className="px-1 py-2 rounded-lg bg-gray-800">
+                        <div className="stat-title">No information found</div>
+                        <div className="stat-value text-lg md:text-lg">
+                            None
+                        </div>
+                    </div>
+                )
+            }
       </div>
         </div>
     )
