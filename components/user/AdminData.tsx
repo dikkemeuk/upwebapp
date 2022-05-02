@@ -17,7 +17,7 @@ export default function AdminPage({id}: AdminPageProps) {
 
     const ToText = (string: string) => {
         const result = string.replace(/([A-Z])/g, " $1");
-        const fixed = result.replaceAll("_", " ");
+        const fixed = result.split("_").join(" ");
         const finalResult = fixed.charAt(0).toUpperCase() + fixed.slice(1);
         return finalResult;
       };

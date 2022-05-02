@@ -21,7 +21,7 @@ export default async function handler(
     )) as any;
 
     const pw = JSON.stringify(res[0]).split(":")[1];
-    const fixed = pw.replaceAll('"', "").replace("}", "");
+    const fixed = pw.split('"').join("").replace("}", "");
 
     return `${fixed}`;
   };

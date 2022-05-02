@@ -7,9 +7,6 @@
     "start": "next start",
     "lint": "next lint"
   },
-  "engines": {
-    "node": ">=16.13.0"
-  },
   "dependencies": {
     "@discordjs/collection": "^0.5.0",
     "@headlessui/react": "^1.4.2",
