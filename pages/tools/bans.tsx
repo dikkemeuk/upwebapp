@@ -21,7 +21,7 @@ export default function BanPage() {
           <Section pretitle="">
             <h1>Banlog</h1>
             <div className="overflow-x-auto">
-              <table className="table w-full">
+              <table className="table bg-slate-600 w-full">
                 <thead>
                   <tr>
                     <th></th>

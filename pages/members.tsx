@@ -25,7 +25,7 @@ export default function MembersPage({mems}: {mems: {uid: Number, name: string, r
   return (
     <Layout head={{title: "Members"}}>
       <div className="h-[80%]">
-        <table className="table w-full">
+        <table className="table bg-slate-600 w-full">
           <thead>
             <tr>
               <th>Name</th>
